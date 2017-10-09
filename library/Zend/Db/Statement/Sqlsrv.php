@@ -193,7 +193,12 @@ class Zend_Db_Statement_Sqlsrv extends Zend_Db_Statement
             $i       = 1;
             foreach ($params as $param) {
                 $temp[$i]  = $param;
-                $params_[] = &$temp[$i];
+                if (is_array($param) && in_array($param[1], [SQLSRV_PARAM_OUT, SQLSRV_PARAM_INOUT])) {
+                    $params_[] = &$temp[$i];
+                } else {
+                    $params_[] = $temp[$i];
+                }
+				//$params_[] = &$temp[$i];
                 $i++;
             }
             $params = $params_;
